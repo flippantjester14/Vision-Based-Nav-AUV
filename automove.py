@@ -132,6 +132,9 @@ def do_automation():
 #master.motors_disarmed_wait()
 # Function to send manual control inputs based on keyboard events
 def send_manual_control_inputs():
+    current_depth = 0.0  # Initialize depth to 0.0 meters
+    depth_change = 0.5  # Depth change per key press
+
     while True:
         try:
             if keyboard.is_pressed('w'):
@@ -148,11 +151,20 @@ def send_manual_control_inputs():
                 time.sleep(20)
                 master.arducopter_disarm()
                 master.motors_disarmed_wait()
-            elif keyboard.is_pressed('s'):
-                do_automation()
+            elif keyboard.is_pressed('q'):
+                current_depth -= depth_change
+                set_target_depth(current_depth)
+                print(f"Depth decreased to {current_depth} meters")
+                time.sleep(0.5)  # Adjust sleep time as needed
+            elif keyboard.is_pressed('z'):
+                current_depth += depth_change
+                set_target_depth(current_depth)
+                print(f"Depth increased to {current_depth} meters")
+                time.sleep(0.5)  # Adjust sleep time as needed
 
         except:
             break
+
 
 # Start a thread to continuously check for keyboard events
 keyboard_thread = keyboard.start_recording()
@@ -160,7 +172,10 @@ keyboard_thread = keyboard.start_recording()
 # Start sending manual control inputs
 send_manual_control_inputs()
 
-# Allow some time for manual control
+# Start adjusting depth based on key presses
+adjust_depth()
+
+# Allow some time for manual control and depth adjustment
 time.sleep(10000)
 
 # Stop the keyboard thread
