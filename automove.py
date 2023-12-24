@@ -1,4 +1,3 @@
-
 import time
 import keyboard
 import math
@@ -7,7 +6,7 @@ from pymavlink import mavutil
 # Imports for attitude
 from pymavlink.quaternion import QuaternionBase
 
-test_depth=1.5
+test_depth=-1.5
 
 def set_target_depth(depth):
     """ Sets the target depth while in depth-hold mode.
@@ -166,7 +165,7 @@ def send_manual_control_inputs():
             elif keyboard.is_pressed('z'):
                 current_depth += depth_change
                 set_target_depth(current_depth)
-                print(f"Depth creased to {current_depth} meters")
+                print(f"Depth decreased to {current_depth} meters")
                 time.sleep(0.5)  # Adjust sleep time as needed
            
             elif keyboard.is_pressed('m'):
